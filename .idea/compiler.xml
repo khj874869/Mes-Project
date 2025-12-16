@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <bytecodeTargetLevel>
+      <module name="mesproject-springboot.libs" target="17" />
+      <module name="mesproject-springboot.libs.event-contract" target="17" />
+      <module name="mesproject-springboot.libs.event-contract.main" target="17" />
+      <module name="mesproject-springboot.libs.event-contract.test" target="17" />
+      <module name="mesproject-springboot.libs.main" target="17" />
+      <module name="mesproject-springboot.libs.test" target="17" />
+      <module name="mesproject-springboot.services" target="17" />
+      <module name="mesproject-springboot.services.event-router" target="17" />
+      <module name="mesproject-springboot.services.event-router.main" target="17" />
+      <module name="mesproject-springboot.services.event-router.test" target="17" />
+      <module name="mesproject-springboot.services.integration-hub" target="17" />
+      <module name="mesproject-springboot.services.integration-hub.main" target="17" />
+      <module name="mesproject-springboot.services.integration-hub.test" target="17" />
+      <module name="mesproject-springboot.services.main" target="17" />
+      <module name="mesproject-springboot.services.mes-core" target="17" />
+      <module name="mesproject-springboot.services.mes-core.main" target="17" />
+      <module name="mesproject-springboot.services.mes-core.test" target="17" />
+      <module name="mesproject-springboot.services.rfid-gateway" target="17" />
+      <module name="mesproject-springboot.services.rfid-gateway.main" target="17" />
+      <module name="mesproject-springboot.services.rfid-gateway.test" target="17" />
+      <module name="mesproject-springboot.services.test" target="17" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="mesproject-backend.services.event-router" options="-parameters" />
+      <module name="mesproject-backend.services.event-router.main" options="-parameters" />
+      <module name="mesproject-backend.services.event-router.test" options="-parameters" />
+      <module name="mesproject-backend.services.integration-hub" options="-parameters" />
+      <module name="mesproject-backend.services.integration-hub.main" options="-parameters" />
+      <module name="mesproject-backend.services.integration-hub.test" options="-parameters" />
+      <module name="mesproject-backend.services.mes-core" options="-parameters" />
+      <module name="mesproject-backend.services.mes-core.main" options="-parameters" />
+      <module name="mesproject-backend.services.mes-core.test" options="-parameters" />
+      <module name="mesproject-backend.services.rfid-gateway" options="-parameters" />
+      <module name="mesproject-backend.services.rfid-gateway.main" options="-parameters" />
+      <module name="mesproject-backend.services.rfid-gateway.test" options="-parameters" />
+      <module name="mesproject-springboot.services.event-router" options="-parameters" />
+      <module name="mesproject-springboot.services.event-router.main" options="-parameters" />
+      <module name="mesproject-springboot.services.event-router.test" options="-parameters" />
+      <module name="mesproject-springboot.services.integration-hub" options="-parameters" />
+      <module name="mesproject-springboot.services.integration-hub.main" options="-parameters" />
+      <module name="mesproject-springboot.services.integration-hub.test" options="-parameters" />
+      <module name="mesproject-springboot.services.mes-core" options="-parameters" />
+      <module name="mesproject-springboot.services.mes-core.main" options="-parameters" />
+      <module name="mesproject-springboot.services.mes-core.test" options="-parameters" />
+      <module name="mesproject-springboot.services.rfid-gateway" options="-parameters" />
+      <module name="mesproject-springboot.services.rfid-gateway.main" options="-parameters" />
+      <module name="mesproject-springboot.services.rfid-gateway.test" options="-parameters" />
+    </option>
+  </component>
+</project>

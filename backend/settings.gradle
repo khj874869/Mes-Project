@@ -1,0 +1,8 @@
+rootProject.name = 'mesproject-backend'
+
+include 'libs:event-contract'
+
+include 'services:rfid-gateway'
+include 'services:event-router'
+include 'services:mes-core'
+include 'services:integration-hub'

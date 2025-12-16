@@ -1,0 +1,24 @@
+server:
+  port: 8082
+spring:
+  application:
+    name: event-router
+  kafka:
+    bootstrap-servers: localhost:29092
+    consumer:
+      auto-offset-reset: earliest
+      properties:
+        spring.json.trusted.packages: com.mesproject.*
+    producer:
+      properties:
+        spring.json.add.type.headers: false
+    streams:
+      application-id: event-router
+      properties:
+        default.key.serde: org.apache.kafka.common.serialization.Serdes$StringSerde
+        default.value.serde: org.springframework.kafka.support.serializer.JsonSerde
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
