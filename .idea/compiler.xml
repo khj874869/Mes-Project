@@ -2,6 +2,10 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <bytecodeTargetLevel>
+      <module name="mesproject-backend.libs.main" target="17" />
+      <module name="mesproject-backend.libs.test" target="17" />
+      <module name="mesproject-backend.services.main" target="17" />
+      <module name="mesproject-backend.services.test" target="17" />
       <module name="mesproject-springboot.libs" target="17" />
       <module name="mesproject-springboot.libs.event-contract" target="17" />
       <module name="mesproject-springboot.libs.event-contract.main" target="17" />

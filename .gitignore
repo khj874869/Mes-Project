@@ -1,0 +1,21 @@
+# IntelliJ / IDE
+.idea/
+*.iml
+
+# Gradle
+.gradle/
+**/build/
+**/out/
+**/gradle/wrapper/dists/
+gradle/caches/
+
+# Node
+**/node_modules/
+**/dist/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# local JDK (do not commit)
+java JDK/
