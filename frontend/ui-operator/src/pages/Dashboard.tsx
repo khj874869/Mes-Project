@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { getJson } from "../lib/http";
+import { HUB } from "../lib/api";
 
 type Health = { status: string };
 
@@ -8,7 +9,7 @@ export default function Dashboard() {
   const [err, setErr] = useState<string | null>(null);
 
   useEffect(() => {
-    getJson<Health>("/api/actuator/health")
+    getJson<Health>(`${HUB}/actuator/health`)
       .then(setHealth)
       .catch((e) => setErr(String(e)));
   }, []);

@@ -1,5 +1,7 @@
 import { useMemo, useState } from "react";
 import { postJson } from "../lib/http";
+import { HUB } from "../lib/api";
+
 
 type Ack = { status: string; idempotencyKey: string } | any;
 
@@ -15,7 +17,7 @@ export default function ErpInboundTest() {
   const send = async () => {
     setResult("sending…");
     try {
-      const res = await postJson<Ack>("/api/erp/work-orders", body, { "X-Request-Id": requestId });
+    const res = await postJson<Ack>(`${HUB}/erp/work-orders`, body, { "X-Request-Id": requestId });
       setResult(JSON.stringify(res, null, 2));
     } catch (e: any) {
       setResult(String(e?.message ?? e));
@@ -27,7 +29,7 @@ export default function ErpInboundTest() {
       <div className="card">
         <h1 className="h1">ERP Inbound 테스트</h1>
         <div className="muted" style={{ marginTop: 6 }}>
-          dev proxy를 통해 <code>/erp/work-orders</code>를 호출합니다. (X-Request-Id로 멱등 확인)
+        Gateway를 통해 <code>{HUB}/erp/work-orders</code>를 호출합니다.
         </div>
       </div>
 
