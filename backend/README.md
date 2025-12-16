@@ -43,3 +43,18 @@ curl.exe -X POST "http://127.0.0.1:8083/erp/work-orders" ^
 
 > 동일한 `X-Request-Id`로 재전송하면 idempotency 처리로 DUPLICATE 응답이 나올 수 있습니다.
 
+ngnix front 및 back 연동 및 통합 
+docker compose -f springboot/docker/docker-compose.app.yml up -d --build 
+
+
+
+운영자: http://localhost/operator/
+
+키오스크: http://localhost/kiosk/
+
+mes-core API: http://localhost/api/core/actuator/health
+
+hub API: http://localhost/api/hub/actuator/health
+
+
+
