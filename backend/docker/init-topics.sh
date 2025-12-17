@@ -9,5 +9,8 @@ set -euo pipefail
 #   integration.erp.inbound
 #   integration.erp.outbox
 #   dlq
+#   mes.logs
+#   site.telemetry.raw
+#   production.result
 
 echo "Use docker-compose 'kafka-init' service to auto-create topics."

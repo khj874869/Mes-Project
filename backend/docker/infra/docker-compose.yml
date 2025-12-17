@@ -64,6 +64,9 @@ services:
       kafka-topics --bootstrap-server kafka:9092 --create --if-not-exists --topic integration.erp.inbound --partitions 1 --replication-factor 1 &&
       kafka-topics --bootstrap-server kafka:9092 --create --if-not-exists --topic integration.erp.outbox --partitions 1 --replication-factor 1 &&
       kafka-topics --bootstrap-server kafka:9092 --create --if-not-exists --topic dlq --partitions 1 --replication-factor 1 &&
+      kafka-topics --bootstrap-server kafka:9092 --create --if-not-exists --topic mes.logs --partitions 1 --replication-factor 1 &&
+      kafka-topics --bootstrap-server kafka:9092 --create --if-not-exists --topic site.telemetry.raw --partitions 1 --replication-factor 1 &&
+      kafka-topics --bootstrap-server kafka:9092 --create --if-not-exists --topic production.result --partitions 1 --replication-factor 1 &&
       echo 'topics ready'
       "
 

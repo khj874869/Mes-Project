@@ -3,6 +3,7 @@ package com.mesproject.mescore.kafka;
 import com.mesproject.contract.RfidNormalizedEvent;
 import com.mesproject.contract.Topics;
 import com.mesproject.mescore.service.WipService;
+import jakarta.persistence.Entity;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
@@ -19,4 +20,6 @@ public class RfidNormalizedConsumer {
     public void onMessage(RfidNormalizedEvent e) {
         wipService.handleNormalized(e);
     }
+
+
 }

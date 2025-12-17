@@ -26,4 +26,5 @@ public class ErpWorkOrderConsumer {
                         () -> workOrderRepository.save(new WorkOrder(e.woNo(), e.itemCode(), e.quantity(), e.dueDate()))
                 );
     }
+
 }

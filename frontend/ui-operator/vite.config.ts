@@ -5,11 +5,17 @@ export default defineConfig({
   plugins: [react()],
   server: {
     proxy: {
-      "/api": {
+      "/api/core": {
+        target: "http://localhost:8080",
+        changeOrigin: true,
+        secure: false,
+        rewrite: (path) => path.replace(/^\/api\/core/, "")
+      },
+      "/api/hub": {
         target: "http://localhost:8083",
         changeOrigin: true,
         secure: false,
-        rewrite: (path) => path.replace(/^\/api/, "")
+        rewrite: (path) => path.replace(/^\/api\/hub/, "")
       }
     }
   }

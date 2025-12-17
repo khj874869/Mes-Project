@@ -18,6 +18,9 @@ runtimeOnly 'org.postgresql:postgresql'
 testImplementation 'org.springframework.boot:spring-boot-starter-test'
     implementation "org.flywaydb:flyway-core:10.17.0"   // 예시: 10.x 최신 계열
 implementation "org.flywaydb:flyway-database-postgresql:10.17.0"
+implementation 'org.springframework.boot:spring-boot-starter-security'
+
+
 }
 
 tasks.named('test') {

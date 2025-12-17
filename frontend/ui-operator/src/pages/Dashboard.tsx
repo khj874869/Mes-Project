@@ -14,7 +14,8 @@ export default function Dashboard() {
       .catch((e) => setErr(String(e)));
   }, []);
 
-  return (
+
+ return (
     <div className="grid">
       <div className="card">
         <h1 className="h1">운영자 대시보드 (MVP)</h1>

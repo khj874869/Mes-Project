@@ -23,4 +23,5 @@ public class ProcessedEvent {
     }
 
     public String getIdempotencyKey() { return idempotencyKey; }
+
 }

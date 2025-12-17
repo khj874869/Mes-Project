@@ -28,4 +28,17 @@ management:
   endpoints:
     web:
       exposure:
-        include: health,info
+        include: health,info,metrics,prometheus
+
+security:
+  jwt:
+    secret: "CHANGE_ME_TO_32+_CHARS_LONG_SECRET_KEY________"
+    ttl-seconds: 3600
+  bootstrap-admin:
+    enabled: true
+    username: admin
+    password: admin1234
+
+telemetry:
+  ingest:
+    api-key: change-me

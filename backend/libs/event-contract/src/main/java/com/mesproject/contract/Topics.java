@@ -9,4 +9,8 @@ public final class Topics {
     public static final String ERP_INBOUND = "integration.erp.inbound";
     public static final String ERP_OUTBOX = "integration.erp.outbox";
     public static final String DLQ = "dlq";
+
+    public static final String LOGS = "mes.logs";
+    public static final String TELEMETRY_RAW = "site.telemetry.raw";
+    public static final String PRODUCTION_RESULT = "production.result";
 }

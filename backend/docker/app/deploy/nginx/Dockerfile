@@ -20,3 +20,5 @@ COPY springboot/docker/app/nginx.conf /etc/nginx/conf.d/default.conf
 RUN rm -rf /usr/share/nginx/html/*
 COPY --from=build-operator /app/dist /usr/share/nginx/html/operator
 COPY --from=build-kiosk /app/dist /usr/share/nginx/html/kiosk
+
+
