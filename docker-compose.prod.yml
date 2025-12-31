@@ -1,0 +1,174 @@
+services:
+  postgres:
+    image: postgres:15.10
+    container_name: mes-postgres
+    restart: unless-stopped
+    ports:
+      - "${POSTGRES_PORT:-25432}:5432"
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-mes}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-mes}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./backend/docker/postgres-init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-mes}"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.6.1
+    container_name: mes-zookeeper
+    restart: unless-stopped
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+
+  kafka:
+    image: confluentinc/cp-kafka:7.6.1
+    container_name: mes-kafka
+    restart: unless-stopped
+    depends_on:
+      - zookeeper
+    ports:
+      - "${KAFKA_HOST_PORT:-29092}:29092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: "zookeeper:2181"
+      KAFKA_LISTENERS: "PLAINTEXT://0.0.0.0:9092,PLAINTEXT_HOST://0.0.0.0:29092"
+      # Host access: change localhost -> your host ip if needed
+      KAFKA_ADVERTISED_LISTENERS: "PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:${KAFKA_HOST_PORT:-29092}"
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: "PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT"
+      KAFKA_INTER_BROKER_LISTENER_NAME: "PLAINTEXT"
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "false"
+
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    container_name: mes-kafka-ui
+    restart: unless-stopped
+    depends_on:
+      - kafka
+    ports:
+      - "${KAFKA_UI_PORT:-8088}:8080"
+    environment:
+      KAFKA_CLUSTERS_0_NAME: local
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:9092
+
+  kafka-init:
+    image: confluentinc/cp-kafka:7.6.1
+    container_name: mes-kafka-init
+    depends_on:
+      - kafka
+    entrypoint: ["/bin/bash","-lc"]
+    command: >
+      "
+      echo 'waiting for kafka...' &&
+      cub kafka-ready -b kafka:9092 1 60 &&
+      kafka-topics --bootstrap-server kafka:9092 --create --if-not-exists --topic rfid.raw --partitions 1 --replication-factor 1 &&
+      kafka-topics --bootstrap-server kafka:9092 --create --if-not-exists --topic rfid.normalized --partitions 1 --replication-factor 1 &&
+      kafka-topics --bootstrap-server kafka:9092 --create --if-not-exists --topic mes.domain.events --partitions 1 --replication-factor 1 &&
+      kafka-topics --bootstrap-server kafka:9092 --create --if-not-exists --topic integration.erp.inbound --partitions 1 --replication-factor 1 &&
+      kafka-topics --bootstrap-server kafka:9092 --create --if-not-exists --topic integration.erp.outbox --partitions 1 --replication-factor 1 &&
+      kafka-topics --bootstrap-server kafka:9092 --create --if-not-exists --topic dlq --partitions 1 --replication-factor 1 &&
+      kafka-topics --bootstrap-server kafka:9092 --create --if-not-exists --topic mes.logs --partitions 1 --replication-factor 1 &&
+      kafka-topics --bootstrap-server kafka:9092 --create --if-not-exists --topic site.telemetry.raw --partitions 1 --replication-factor 1 &&
+      kafka-topics --bootstrap-server kafka:9092 --create --if-not-exists --topic production.result --partitions 1 --replication-factor 1 &&
+      echo 'topics ready'
+      "
+
+  # ===== Apps =====
+  mes-core:
+    build:
+      context: ./backend
+      dockerfile: docker/app/Dockerfile.springboot
+      args:
+        SERVICE: mes-core
+    container_name: mes-core
+    restart: unless-stopped
+    environment:
+      SERVER_PORT: 8080
+      SPRING_PROFILES_ACTIVE: docker,prod
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/mes_core
+      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER:-mes}
+      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD:-mes}
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      SECURITY_BOOTSTRAP_ADMIN_ENABLED: ${BOOTSTRAP_ADMIN_ENABLED:-true}
+      SECURITY_BOOTSTRAP_ADMIN_USERNAME: ${BOOTSTRAP_ADMIN_USERNAME:-admin}
+      SECURITY_BOOTSTRAP_ADMIN_PASSWORD: ${BOOTSTRAP_ADMIN_PASSWORD:-admin1234}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      kafka-init:
+        condition: service_completed_successfully
+
+  integration-hub:
+    build:
+      context: ./backend
+      dockerfile: docker/app/Dockerfile.springboot
+      args:
+        SERVICE: integration-hub
+    container_name: integration-hub
+    restart: unless-stopped
+    environment:
+      SERVER_PORT: 8083
+      SPRING_PROFILES_ACTIVE: docker,prod
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/integration_hub
+      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER:-mes}
+      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD:-mes}
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+    depends_on:
+      postgres:
+        condition: service_healthy
+      kafka-init:
+        condition: service_completed_successfully
+
+  rfid-gateway:
+    build:
+      context: ./backend
+      dockerfile: docker/app/Dockerfile.springboot
+      args:
+        SERVICE: rfid-gateway
+    container_name: rfid-gateway
+    restart: unless-stopped
+    environment:
+      SERVER_PORT: 8081
+      SPRING_PROFILES_ACTIVE: docker,prod
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+    depends_on:
+      kafka-init:
+        condition: service_completed_successfully
+
+  event-router:
+    build:
+      context: ./backend
+      dockerfile: docker/app/Dockerfile.springboot
+      args:
+        SERVICE: event-router
+    container_name: event-router
+    restart: unless-stopped
+    environment:
+      SERVER_PORT: 8082
+      SPRING_PROFILES_ACTIVE: docker,prod
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+    depends_on:
+      kafka-init:
+        condition: service_completed_successfully
+
+  nginx:
+    build:
+      context: .
+      dockerfile: deploy/nginx/Dockerfile
+    container_name: mes-nginx
+    restart: unless-stopped
+    ports:
+      - "${HTTP_PORT:-80}:80"
+    depends_on:
+      - mes-core
+      - integration-hub
+      - rfid-gateway
+      - event-router
+
+volumes:
+  pgdata:

@@ -1,0 +1,25 @@
+# Reduce build context size (important for Docker Compose builds)
+.git
+**/.git
+**/.DS_Store
+**/*.log
+
+# Node
+**/node_modules
+**/dist
+**/.vite
+**/.cache
+
+# Gradle/Java build outputs & caches
+**/.gradle
+**/build
+**/out
+**/target
+
+# IDE
+**/.idea
+**/*.iml
+**/.vscode
+
+# Local env
+**/.env

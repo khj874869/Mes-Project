@@ -1,0 +1,33 @@
+plugins {
+    id 'org.springframework.boot' version '3.3.5'
+    id 'io.spring.dependency-management' version '1.1.6'
+    id 'java'
+}
+
+
+dependencies {
+
+implementation project(':libs:event-contract')
+implementation 'org.springframework.boot:spring-boot-starter-web'
+implementation 'org.springframework.boot:spring-boot-starter-actuator'
+implementation 'org.springframework.kafka:spring-kafka'
+implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+implementation 'org.springframework.boot:spring-boot-starter-validation'
+implementation 'org.flywaydb:flyway-core'
+runtimeOnly 'org.postgresql:postgresql'
+testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    implementation "org.flywaydb:flyway-core:10.17.0"   // 예시: 10.x 최신 계열
+implementation "org.flywaydb:flyway-database-postgresql:10.17.0"
+implementation 'org.springframework.boot:spring-boot-starter-security'
+
+
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+jar { enabled = false }
+
+bootJar {
+    archiveFileName = "app.jar"
+}

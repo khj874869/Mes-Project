@@ -1,0 +1,61 @@
+server:
+  port: 8080
+  forward-headers-strategy: framework
+  compression:
+    enabled: true
+    min-response-size: 1024
+    mime-types: application/json,text/plain,text/css,application/javascript
+spring:
+  application:
+    name: mes-core
+  kafka:
+    bootstrap-servers: localhost:29092
+    consumer:
+      auto-offset-reset: earliest
+      properties:
+        spring.json.trusted.packages: com.mesproject.*
+    producer:
+      properties:
+        spring.json.add.type.headers: false
+  datasource:
+    url: jdbc:postgresql://localhost:5432/mes_core
+    username: mes
+    password: mes
+    hikari:
+      maximum-pool-size: 20
+      minimum-idle: 5
+      connection-timeout: 3000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        format_sql: false
+        jdbc:
+          batch_size: 50
+        order_inserts: true
+        order_updates: true
+        jdbc.time_zone: UTC
+  flyway:
+    enabled: true
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+
+security:
+  jwt:
+    secret: "CHANGE_ME_TO_32+_CHARS_LONG_SECRET_KEY________"
+    ttl-seconds: 3600
+  bootstrap-admin:
+    enabled: true
+    username: admin
+    password: admin1234
+
+telemetry:
+  ingest:
+    api-key: change-me

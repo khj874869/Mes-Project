@@ -1,0 +1,23 @@
+# Production-ish defaults (overlay on top of application.yml + docker profile)
+server:
+  forward-headers-strategy: framework
+spring:
+  main:
+    banner-mode: "off"
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+  jpa:
+    open-in-view: false
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  endpoint:
+    health:
+      probes:
+        enabled: true
+logging:
+  level:
+    root: INFO

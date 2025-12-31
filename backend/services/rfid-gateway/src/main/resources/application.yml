@@ -1,0 +1,19 @@
+server:
+  port: 8081
+spring:
+  application:
+    name: rfid-gateway
+  kafka:
+    bootstrap-servers: localhost:29092
+    consumer:
+      auto-offset-reset: earliest
+      properties:
+        spring.json.trusted.packages: com.mesproject.*
+    producer:
+      properties:
+        spring.json.add.type.headers: false
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info

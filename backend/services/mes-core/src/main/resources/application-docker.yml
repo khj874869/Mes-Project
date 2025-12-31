@@ -1,0 +1,6 @@
+spring:
+  # When running inside docker-compose, use service DNS names.
+  datasource:
+    url: jdbc:postgresql://postgres:5432/mes_core
+  kafka:
+    bootstrap-servers: kafka:9092

@@ -1,0 +1,22 @@
+<configuration>
+    <property name="SERVICE_NAME" value="${spring.application.name:-integration-hub}"/>
+    <property name="KAFKA_BOOTSTRAP" value="${SPRING_KAFKA_BOOTSTRAP_SERVERS:-${KAFKA_BOOTSTRAP_SERVERS:-localhost:29092}}"/>
+
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%thread] %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="KAFKA" class="com.mesproject.integrationhub.logging.logback.KafkaLogbackAppender">
+        <bootstrapServers>${KAFKA_BOOTSTRAP}</bootstrapServers>
+        <topic>mes.logs</topic>
+        <service>${SERVICE_NAME}</service>
+        <threshold>INFO</threshold>
+    </appender>
+
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="KAFKA"/>
+    </root>
+</configuration>

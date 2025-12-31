@@ -1,0 +1,20 @@
+# syntax=docker/dockerfile:1.5
+FROM gradle:8.7-jdk17 AS build
+ARG SERVICE
+WORKDIR /workspace
+
+# Copy backend (Gradle root)
+COPY . .
+
+# Optional sanity check (fails fast if context wrong)
+RUN test -f /workspace/settings.gradle
+
+RUN --mount=type=cache,target=/home/gradle/.gradle \
+    gradle --no-daemon :services:${SERVICE}:bootJar -x test --stacktrace
+
+FROM eclipse-temurin:17-jre
+ARG SERVICE
+WORKDIR /app
+COPY --from=build /workspace/services/${SERVICE}/build/libs/app.jar /app/app.jar
+EXPOSE 8080
+ENTRYPOINT ["sh","-lc","java -jar /app/app.jar"]

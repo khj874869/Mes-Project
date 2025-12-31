@@ -1,0 +1,33 @@
+# IntelliJ / IDE
+.idea/
+*.iml
+
+# Gradle
+.gradle/
+**/.gradle/
+**/build/
+backend/gradle/caches/
+backend/gradle/wrapper/dists/
+*.log
+
+# Node
+**/node_modules/
+**/dist/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# local JDK (do not commit)
+java JDK/
+
+
+# Node
+**/node_modules/
+**/dist/
+**/.vite/
+
+# Env / secret
+.env
+*.pem
+*.key

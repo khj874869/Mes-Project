@@ -1,0 +1,26 @@
+services:
+  # 외부 공개용 Reverse Proxy + HTTPS(자동 인증서: Let's Encrypt)
+  caddy:
+    image: caddy:2-alpine
+    container_name: mes-caddy
+    restart: unless-stopped
+    depends_on:
+      - nginx
+    environment:
+      DOMAIN: ${DOMAIN}
+      ACME_EMAIL: ${ACME_EMAIL}
+    ports:
+      - "${PUBLIC_HTTP_PORT:-8080}:80"
+      - "${PUBLIC_HTTPS_PORT:-8443}:443"
+    volumes:
+      - ./deploy/caddy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+
+  # 공개 모드에서는 nginx를 내부 전용으로 (Caddy가 앞단에서 TLS 처리) 원 공개 하려면 80 / 443
+  nginx:
+    ports: []
+
+volumes:
+  caddy_data:
+  caddy_config:
